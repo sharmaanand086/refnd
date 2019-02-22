@@ -38,8 +38,8 @@ include 'conn.php';
             <p>Step <span>3:</span> Redeem & Use</p>
         </div>
         <div class="scroll">
-        <p><i>Scroll to continue</i></p>
-        <span class="glyphicon glyphicon-menu-down"></span>
+        <p><i class="scrolldown">Scroll to continue</i></p>
+        <span class="glyphicon glyphicon-menu-down scrolldown"></span>
     </div>
     </div>
 </div>
@@ -83,12 +83,14 @@ include 'conn.php';
                 $email = $_POST['email'];
                 $sql = "SELECT * FROM nuser WHERE `email` = '$email'";
             	$result = $conn->query($sql);
-            	
+            	$abc=1;
                 	while($row = $result->fetch_assoc()) {
                 	    $keyword = $row['product'];
                 	    $sql1 = "SELECT * FROM productinfo WHERE `matchkey` = '$keyword'";
             	        $result1 = $conn->query($sql1);
+            	        
         	            	while($row1 = $result1->fetch_assoc()) {
+        	            	    $abc = $abc+1;
                 ?>
                     <div class="col-md-4  product_container" onclick="abc(this.id)" id="<?php echo $row['id'] ?>">
                         <input type="hidden" id="key<?php echo $row['id'] ?>" value="<?php echo $row['product']; ?>" /> 
@@ -99,32 +101,17 @@ include 'conn.php';
                         <div class="product_name">
                             <p><?php echo $row1['name']; ?><br><span>Rs. <?php echo $row['amount']; ?></span></p>
                              <label class="cust-check">
-                                <input class="styled-checkbox" id="checkproduct" type="checkbox" name="check" value="value2" onclick="calc();">
+                                <input class="styled-checkbox" id="checkproduct<?php echo $abc; ?>" type="checkbox" name="check" value="value2" >
                                <span class="checkmark"></span>
                             </label>
                         </div>
                    </div>
-                            <!--<div class="product_listboot" onclick="abc(this.id)" id="<?php echo $row['id'] ?>">-->
-                            <!--    <input type="hidden" id="key<?php echo $row['id'] ?>" value="<?php echo $row['product']; ?>" />-->
-                            <!--    <input type="hidden" id="price<?php echo $row['id'] ?>" value="<?php echo $row['amount']; ?>" />-->
-                            <!--<div class="row scolor" id="desccolor<?php echo $row['id'] ?>">-->
-                            <!--    <div class="col-md-4 product_container">-->
-                            <!--        <div class="product_images">-->
-                            <!--            <img src="<?php echo $row1['image']; ?>" alt="">-->
-                            <!--        </div>-->
-                            <!--    </div>-->
-                            <!--    <div class="col-md-8 product_container">-->
-                            <!--        <div class="product_desc"  >-->
-                            <!--            <p class="product_heading"><b><?php echo $row1['name']; ?></b></p>-->
-                            <!--            <p class="product_subheading"><?php echo $row1['descr']; ?></p>-->
-                            <!--            <p class="product_price">Rs.<?php echo $row['amount']; ?></p>-->
-                            <!--        </div>-->
-                            <!--    </div>-->
-                            <!--</div>-->
-                            <!--</div>-->
+                            
                <?php
+               
         	            	}
                 	}
+                	
                ?>
                
                 <div class="hello">
@@ -185,15 +172,24 @@ function abc(id){
     
 }
 
-$( document ).ready(function() {
+$(document).ready(function() {
+  
    $('.one').addClass('active');
 });
-
+$(document).ready(function() {
+var list = document.querySelectorAll('input.styled-checkbox ');
+for (var item of list) {
+    item.checked = false;
+}
+});
 $("#proceedid").click(function(){
     //alert('sdf');
-    var abc= $('input.styled-checkbox').prop('checked');
-   // alert(abc);
-    if(abc == true){
+    var abc= $('#checkproduct2').prop('checked');
+    var abc1= $('#checkproduct3').prop('checked');
+    var abc2= $('#checkproduct4').prop('checked');
+    var abc4= $('#checkproduct5').prop('checked');
+    //alert(abc);
+    if(abc == true || abc1 == true || abc2 == true || abc4 == true){
    var key=  document.getElementById("keyvalueofhidden").value;
    if(key==""){
        alert("Please Select Any Product Proceed !");
@@ -208,6 +204,11 @@ $("#proceedid").click(function(){
 });
 $('input.styled-checkbox').on('change', function() {
     $('input.styled-checkbox').not(this).prop('checked', false);  
+});
+$(".scrolldown").click(function() {
+    $('html,body').animate({
+        scrollTop: $(".step_bar").offset().top},
+        'slow');
 });
 </script>
 
